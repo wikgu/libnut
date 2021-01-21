@@ -8,3 +8,16 @@ describe("Screen", () => {
     expect(screenSize.height !== undefined).toBeTruthy();
   });
 });
+
+describe("Capture", () => {
+  it("byteWidth", () => {
+    // GIVEN
+    const regionScreenShot = libnut.screen.capture(0, 0, 100, 100);
+
+    // WHEN
+    const expectedByteWidth = regionScreenShot.width * regionScreenShot.bytesPerPixel;
+
+    // THEN
+    expect(expectedByteWidth).toBe(regionScreenShot.byteWidth);
+  });
+});
