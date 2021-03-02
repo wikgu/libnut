@@ -1,6 +1,7 @@
 #include "../keycode.h"
 
-MMKeyCode keyCodeForChar(const char c)
+MMKeyCode keyCodeForChar(const unsigned long c)
 {
 	return VkKeyScan(c);
 }
+MMKeyFlags

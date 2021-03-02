@@ -8,7 +8,7 @@
  * responsibility to release the returned object. */
 CFStringRef createStringForKey(CGKeyCode keyCode);
 
-MMKeyCode keyCodeForChar(const char c)
+MMKeyCode keyCodeForChar(const unsigned long c)
 {
 	/* OS X does not appear to have a built-in function for this, so instead we
 	 * have to write our own. */

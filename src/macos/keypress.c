@@ -64,7 +64,7 @@ void tapKeyCode(MMKeyCode code, MMKeyFlags flags)
 	toggleKeyCode(code, false, flags);
 }
 
-void toggleKey(char c, const bool down, MMKeyFlags flags)
+void toggleKey(unsigned long c, const bool down, MMKeyFlags flags)
 {
 	MMKeyCode keyCode = keyCodeForChar(c);
 
@@ -76,7 +76,7 @@ void toggleKey(char c, const bool down, MMKeyFlags flags)
 	toggleKeyCode(keyCode, down, flags);
 }
 
-void tapKey(char c, MMKeyFlags flags)
+void tapKey(unsigned long c, MMKeyFlags flags)
 {
 	toggleKey(c, true, flags);
 	toggleKey(c, false, flags);

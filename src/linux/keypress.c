@@ -5,6 +5,7 @@
 #include <ctype.h> /* For isupper() */
 
 #include <X11/extensions/XTest.h>
+#include <stdio.h>
 #include "../xdisplay.h"
 
 #define X_KEY_EVENT(display, key, is_press)            \
@@ -40,7 +41,7 @@ void tapKeyCode(MMKeyCode code, MMKeyFlags flags)
 	toggleKeyCode(code, false, flags);
 }
 
-void toggleKey(char c, const bool down, MMKeyFlags flags)
+void toggleKey(unsigned long c, const bool down, MMKeyFlags flags)
 {
 	MMKeyCode keyCode = keyCodeForChar(c);
 
@@ -54,7 +55,7 @@ void toggleKey(char c, const bool down, MMKeyFlags flags)
 	toggleKeyCode(keyCode, down, flags);
 }
 
-void tapKey(char c, MMKeyFlags flags)
+void tapKey(unsigned long c, MMKeyFlags flags)
 {
 	toggleKey(c, true, flags);
 	toggleKey(c, false, flags);
@@ -62,7 +63,7 @@ void tapKey(char c, MMKeyFlags flags)
 
 #define toggleUniKey(c, down) toggleKey(c, down, MOD_NONE)
 
-static void tapUniKey(char c)
+static void tapUniKey(unsigned long c)
 {
 	toggleUniKey(c, true);
 	toggleUniKey(c, false);

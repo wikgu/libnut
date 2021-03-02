@@ -1,4 +1,5 @@
 #include "../keycode.h"
+#include <stdio.h>
 
 /*
  * Structs to store key mappings not handled by XStringToKeysym() on some
@@ -48,13 +49,12 @@ struct XSpecialCharacterMapping XSpecialCharacterTable[] = {
   	{'\n', XK_Return}
 };
 
-MMKeyCode keyCodeForChar(const char c)
+MMKeyCode keyCodeForChar(const unsigned long c)
 {
 	MMKeyCode code;
-
-	char buf[2];
-	buf[0] = c;
-	buf[1] = '\0';
+    int index;
+    char buf[6];
+    snprintf(buf, sizeof(buf), "U%04lX", c);
 
 	code = XStringToKeysym(buf);
 	if (code == NoSymbol) {

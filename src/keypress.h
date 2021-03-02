@@ -62,8 +62,8 @@ void toggleKeyCode(MMKeyCode code, const bool down, MMKeyFlags flags);
 void tapKeyCode(MMKeyCode code, MMKeyFlags flags);
 
 /* Toggles the key corresponding to the given UTF character up or down. */
-void toggleKey(char c, const bool down, MMKeyFlags flags);
-void tapKey(char c, MMKeyFlags flags);
+void toggleKey(unsigned long c, const bool down, MMKeyFlags flags);
+void tapKey(unsigned long c, MMKeyFlags flags);
 
 /* Sends a UTF-8 string without modifiers. */
 void typeString(const char *str);

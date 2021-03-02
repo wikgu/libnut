@@ -275,7 +275,7 @@ typedef int MMKeyCode;
 
 /* Returns the keyCode corresponding to the current keyboard layout for the
  * given ASCII character. */
-MMKeyCode keyCodeForChar(const char c);
+MMKeyCode keyCodeForChar(const unsigned long c);
 
 #ifdef __cplusplus
 }
