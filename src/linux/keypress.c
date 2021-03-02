@@ -77,6 +77,36 @@ void typeString(const char *str)
 	unsigned short c3;
 	unsigned long n;
 
+	int scratch_keycode = 0;
+    Display *display = XGetMainDisplay();
+    KeySym *keysyms = NULL;
+    int keysyms_per_keycode = 0;
+    int keycode_low, keycode_high;
+
+    XDisplayKeycodes(display, &keycode_low, &keycode_high);
+    keysyms = XGetKeyboardMapping(display, keycode_low, keycode_high - keycode_low, &keysyms_per_keycode);
+
+    int i;
+    for (i = keycode_low; i <= keycode_high; i++)
+    {
+        int j = 0;
+        int key_is_empty = 1;
+        for (j = 0; j < keysyms_per_keycode; j++)
+        {
+          int symindex = (i - keycode_low) * keysyms_per_keycode + j;
+
+          if(keysyms[symindex] != 0) {
+            key_is_empty = 0;
+          } else {
+            break;
+          }
+        }
+        if(key_is_empty) {
+        scratch_keycode = i;
+        break;
+        }
+    }
+
 	while (*str != '\0')
 	{
 		c = *str++;
@@ -110,9 +140,27 @@ void typeString(const char *str)
 			n = ((c & 0x07) << 18) | (c1 << 12) | (c2 << 6) | c3;
 		}
 
-		toggleUniKey(n, true);
-		toggleUniKey(n, false);
+        char buf[6];
+        snprintf(buf, sizeof(buf), "U%04lX", n);
+
+
+        //find the keysym for the given unicode char
+        //map that keysym to our previous unmapped keycode
+        //click that keycode/'button' with our keysym on it
+        KeySym sym = XStringToKeysym(buf);
+        KeySym keysym_list[] = { sym, sym };
+        XChangeKeyboardMapping(display, scratch_keycode, 2, keysym_list, 1);
+        KeyCode code = scratch_keycode;
+
+		XTestFakeKeyEvent(display, code, true, CurrentTime);
+		XTestFakeKeyEvent(display, code, false, CurrentTime);
+
+        XSync(display, false);
+        microsleep(DEADBEEF_UNIFORM(0.0, 62.5));
 	}
+
+    KeySym keysym_list[] = { 0 };
+    XChangeKeyboardMapping(display, scratch_keycode, 1, keysym_list, 1);
 }
 
 void typeStringDelayed(const char *str, const unsigned cpm)
