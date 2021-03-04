@@ -4,4 +4,3 @@ MMKeyCode keyCodeForChar(const unsigned long c)
 {
 	return VkKeyScan(c);
 }
-MMKeyFlags
