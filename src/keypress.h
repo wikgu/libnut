@@ -20,28 +20,24 @@
 
 #elif defined(USE_X11)
 
-	enum _MMKeyFlags {
+	typedef enum {
 		MOD_NONE = 0,
 		MOD_META = Mod4Mask,
 		MOD_ALT = Mod1Mask,
 		MOD_CONTROL = ControlMask,
 		MOD_SHIFT = ShiftMask
-	};
-
-	typedef unsigned int MMKeyFlags;
+	} MMKeyFlags;
 
 #elif defined(IS_WINDOWS)
 
-	enum _MMKeyFlags {
+	typedef enum {
 		MOD_NONE = 0,
 		/* These are already defined by the Win32 API */
 		/* MOD_ALT = 0,
 		MOD_CONTROL = 0,
 		MOD_SHIFT = 0, */
 		MOD_META = MOD_WIN
-	};
-
-	typedef unsigned int MMKeyFlags;
+	} MMKeyFlags;
 
 #endif
 
