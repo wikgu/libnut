@@ -384,23 +384,23 @@ int CheckKeyFlags(std::string &flagString, MMKeyFlags *flags)
 
 	if (flagString.compare("alt") == 0)
 	{
-		*flags = MOD_ALT;
+		*flags = static_cast<MMKeyFlags>(MOD_ALT);
 	}
 	else if (flagString.compare("command") == 0)
 	{
-		*flags = MOD_META;
+		*flags = static_cast<MMKeyFlags>(MOD_META);
 	}
 	else if (flagString.compare("control") == 0)
 	{
-		*flags = MOD_CONTROL;
+		*flags = static_cast<MMKeyFlags>(MOD_CONTROL);
 	}
 	else if (flagString.compare("shift") == 0)
 	{
-		*flags = MOD_SHIFT;
+		*flags = static_cast<MMKeyFlags>(MOD_SHIFT);
 	}
 	else if (flagString.compare("none") == 0)
 	{
-		*flags = MOD_NONE;
+		*flags = static_cast<MMKeyFlags>(MOD_NONE);
 	}
 	else
 	{
