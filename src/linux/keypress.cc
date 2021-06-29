@@ -44,14 +44,12 @@ void toggleKey(char c, const bool down, MMKeyFlags flags)
 {
 	MMKeyCode keyCode = keyCodeForChar(c);
 
-	//Prevent unused variable warning for Mac and Linux.
-
 	if (isupper(c) && !(flags & MOD_SHIFT))
 	{
-		flags |= MOD_SHIFT; /* Not sure if this is safe for all layouts. */
+		toggleKeyCode(keyCode, down, flags | MOD_SHIFT);
+	} else {
+		toggleKeyCode(keyCode, down, flags);
 	}
-
-	toggleKeyCode(keyCode, down, flags);
 }
 
 void tapKey(char c, MMKeyFlags flags)
