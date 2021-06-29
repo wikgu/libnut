@@ -46,6 +46,6 @@ char * getXDisplay(void)
 
 void setXDisplay(const char *name)
 {
-	displayName = std::string(name).c_str();
+	displayName = const_cast<char *>(std::string(name).c_str());
 	hasDisplayNameChanged = 1;
 }
