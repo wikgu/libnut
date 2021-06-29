@@ -1,6 +1,5 @@
 #include "../screengrab.h"
 #include "../endian.h"
-#include <stdlib.h> /* malloc() */
 
 #include <ApplicationServices/ApplicationServices.h>
 
@@ -25,7 +24,7 @@ MMBitmapRef copyMMBitmapFromDisplayInRect(MMRect rect)
 	if (!imageData) { return NULL; }
 
 	bufferSize = CFDataGetLength(imageData);
-	buffer = malloc(bufferSize);
+	buffer = new uint8_t[bufferSize];
 
 	CFDataGetBytes(imageData, CFRangeMake(0,bufferSize), buffer);
 

@@ -3,15 +3,10 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <Carbon/Carbon.h> /* For kVK_ constants, and TIS functions. */
 
-/* Returns string representation of key, if it is printable.
- * Ownership follows the Create Rule; that is, it is the caller's
- * responsibility to release the returned object. */
 CFStringRef createStringForKey(CGKeyCode keyCode);
 
 MMKeyCode keyCodeForChar(const char c)
 {
-	/* OS X does not appear to have a built-in function for this, so instead we
-	 * have to write our own. */
 	static CFMutableDictionaryRef charToCodeDict = NULL;
 	CGKeyCode code;
 	UniChar character = c;
@@ -56,11 +51,8 @@ MMKeyCode keyCodeForChar(const char c)
 CFStringRef createStringForKey(CGKeyCode keyCode)
 {
 	TISInputSourceRef currentKeyboard = TISCopyCurrentASCIICapableKeyboardInputSource();
-	CFDataRef layoutData =
-		TISGetInputSourceProperty(currentKeyboard,
-								  kTISPropertyUnicodeKeyLayoutData);
-	const UCKeyboardLayout *keyboardLayout =
-		(const UCKeyboardLayout *)CFDataGetBytePtr(layoutData);
+	CFDataRef layoutData = reinterpret_cast<CFDataRef>(TISGetInputSourceProperty(currentKeyboard, kTISPropertyUnicodeKeyLayoutData));
+	const UCKeyboardLayout *keyboardLayout = (const UCKeyboardLayout *)CFDataGetBytePtr(layoutData);
 
 	UInt32 keysDown = 0;
 	UniChar chars[4];
