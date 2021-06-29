@@ -2,7 +2,7 @@
 #include "../deadbeef_rand.h"
 #include "../microsleep.h"
 
-#include <ctype.h> /* For isupper() */
+#include <cctype> /* For isupper() */
 
 #include <X11/extensions/XTest.h>
 #include "../xdisplay.h"

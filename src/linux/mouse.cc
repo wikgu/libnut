@@ -1,11 +1,11 @@
 #include "../mouse.h"
 #include "../microsleep.h"
 
-#include <math.h> /* For floor() */
+#include <cmath> /* For floor() */
 
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include "../xdisplay.h"
 
 #if !defined(M_SQRT2)

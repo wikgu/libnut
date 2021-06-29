@@ -1,7 +1,7 @@
 #include "../xdisplay.h"
-#include <stdio.h> /* For fputs() */
-#include <stdlib.h> /* For atexit() */
-#include <string.h> /* For strdup() */
+#include <cstdio> /* For fputs() */
+#include <cstdlib> /* For atexit() */
+#include <string> /* For strdup() */
 
 static Display *mainDisplay = NULL;
 static int registered = 0;
@@ -46,6 +46,6 @@ char * getXDisplay(void)
 
 void setXDisplay(const char *name)
 {
-	displayName = strdup(name);
+	displayName = std::string(name).c_str();
 	hasDisplayNameChanged = 1;
 }
