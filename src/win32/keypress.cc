@@ -48,7 +48,7 @@ void win32KeyEvent(int key, MMKeyFlags flags)
 	case VK_BROWSER_HOME:
 	case VK_LAUNCH_MAIL:
 	{
-		flags |= KEYEVENTF_EXTENDEDKEY;
+		flags = flags | KEYEVENTF_EXTENDEDKEY;
 		break;
 	}
 	}
