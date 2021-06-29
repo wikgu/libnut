@@ -99,16 +99,16 @@ void toggleKey(char c, const bool down, MMKeyFlags flags)
 
 	if (isupper(c) && !(flags & MOD_SHIFT))
 	{
-		flags |= MOD_SHIFT; /* Not sure if this is safe for all layouts. */
+		flags = flags | MOD_SHIFT; /* Not sure if this is safe for all layouts. */
 	}
 
 	modifiers = keyCode >> 8; // Pull out modifers.
 	if ((modifiers & 1) != 0)
-		flags |= MOD_SHIFT; // Uptdate flags from keycode modifiers.
+		flags = flags | MOD_SHIFT; // Uptdate flags from keycode modifiers.
 	if ((modifiers & 2) != 0)
-		flags |= MOD_CONTROL;
+		flags = flags | MOD_CONTROL;
 	if ((modifiers & 4) != 0)
-		flags |= MOD_ALT;
+		flags = flags | MOD_ALT;
 	keyCode = keyCode & 0xff; // Mask out modifiers.
 	toggleKeyCode(keyCode, down, flags);
 }
