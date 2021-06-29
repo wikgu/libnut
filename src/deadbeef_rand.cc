@@ -1,5 +1,5 @@
 #include "deadbeef_rand.h"
-#include <time.h>
+#include <ctime>
 
 static uint32_t deadbeef_seed;
 static uint32_t deadbeef_beef = 0xdeadbeef;

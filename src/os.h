@@ -1,6 +1,4 @@
 #pragma once
-#ifndef OS_H
-#define OS_H
 
 #if !defined(IS_MACOSX) && defined(__APPLE__) && defined(__MACH__)
 	#define IS_MACOSX
@@ -38,5 +36,3 @@
 	/* Aligns given width to padding. */
 	#define ADD_PADDING(width) (BYTE_ALIGN + (((width) - 1) & ~(BYTE_ALIGN - 1)))
 #endif
-
-#endif /* OS_H */

@@ -1,34 +1,26 @@
 #pragma once
-#ifndef TYPES_H
-#define TYPES_H
 
 #include "os.h"
 #include "inline_keywords.h" /* For H_INLINE */
-#include <stddef.h>
-#include <stdint.h>
+#include <cstddef>
+#include <cstdint>
 
 /* Some generic, cross-platform types. */
 
-struct _MMPoint {
+typedef struct {
 	int64_t x;
 	int64_t y;
-};
+} MMPoint;
 
-typedef struct _MMPoint MMPoint;
-
-struct _MMSize {
+typedef struct {
 	int64_t width;
 	int64_t height;
-};
+} MMSize;
 
-typedef struct _MMSize MMSize;
-
-struct _MMRect {
+typedef struct _MMRect {
 	MMPoint origin;
 	MMSize size;
-};
-
-typedef struct _MMRect MMRect;
+} MMRect;
 
 H_INLINE MMPoint MMPointMake(int64_t x, int64_t y)
 {
@@ -68,5 +60,3 @@ H_INLINE MMRect MMRectMake(int64_t x, int64_t y, int64_t width, int64_t height)
 #endif
 
 typedef int64_t WindowHandle;
-
-#endif /* TYPES_H */

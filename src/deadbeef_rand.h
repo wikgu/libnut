@@ -1,7 +1,7 @@
 #ifndef DEADBEEF_RAND_H
 #define DEADBEEF_RAND_H
 
-#include <stdint.h>
+#include <cstdint>
 
 #define DEADBEEF_MAX UINT32_MAX
 

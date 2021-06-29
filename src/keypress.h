@@ -1,6 +1,4 @@
 #pragma once
-#ifndef KEYPRESS_H
-#define KEYPRESS_H
 
 #include "os.h"
 #include "keycode.h"
@@ -8,11 +6,8 @@
 #include "xdisplay.h"
 #endif
 
-#include <stdbool.h>
-#ifdef __cplusplus
-extern "C" 
-{
-#endif
+#include <string>
+
 #if defined(IS_MACOSX)
 
 	typedef enum  {
@@ -50,11 +45,6 @@ extern "C"
 
 #endif
 
-#if defined(IS_WINDOWS)
-/* Send win32 key event for given key. */
-void win32KeyEvent(int key, MMKeyFlags flags);
-#endif
-
 /* Toggles the given key down or up. */
 void toggleKeyCode(MMKeyCode code, const bool down, MMKeyFlags flags);
 
@@ -66,19 +56,4 @@ void toggleKey(char c, const bool down, MMKeyFlags flags);
 void tapKey(char c, MMKeyFlags flags);
 
 /* Sends a UTF-8 string without modifiers. */
-void typeString(const char *str);
-
-/* Macro to convert WPM to CPM integers.
- * (the average English word length is 5.1 characters.) */
-#define WPM_TO_CPM(WPM) (unsigned)(5.1 * WPM)
-
-/* Sends a string with partially random delays between each letter. Note that
- * deadbeef_srand() must be called before this function if you actually want
- * randomness. */
-void typeStringDelayed(const char *str, const unsigned cpm);
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* KEYPRESS_H */
+void typeString(const std::u16string &str);

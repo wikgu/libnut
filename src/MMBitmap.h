@@ -1,18 +1,10 @@
 #pragma once
-#ifndef MMBITMAP_H
-#define MMBITMAP_H
 
 #include "types.h"
-#include "rgb.h"
 #include <assert.h>
 #include <stdint.h>
 
-#ifdef __cplusplus
-extern "C" 
-{
-#endif
-
-struct _MMBitmap {
+typedef struct {
 	uint8_t *imageBuffer;  /* Pixels stored in Quad I format; i.e., origin is in
 	                        * top left. Length should be height * bytewidth. */
 	size_t width;          /* Never 0, unless image is NULL. */
@@ -20,9 +12,8 @@ struct _MMBitmap {
 	size_t bytewidth;      /* The aligned width (width + padding). */
 	uint8_t bitsPerPixel;  /* Should be either 24 or 32. */
 	uint8_t bytesPerPixel; /* For convenience; should be bitsPerPixel / 8. */
-};
+} MMBitmap;
 
-typedef struct _MMBitmap MMBitmap;
 typedef MMBitmap *MMBitmapRef;
 
 /* Creates new MMBitmap with the given values.
@@ -51,9 +42,3 @@ MMBitmapRef copyMMBitmapFromPortion(MMBitmapRef source, MMRect rect);
 	 ((r).origin.y + (r).size.height <= (int64_t)(image)->height))
 
 #define MMBitmapGetBounds(image) MMRectMake(0, 0, image->width, image->height)
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif /* MMBITMAP_H */
