@@ -1,12 +1,8 @@
 #include "../mouse.h"
 #include "../microsleep.h"
 
-#include <math.h> /* For floor() */
+#include <cmath> /* For floor() */
 #include <ApplicationServices/ApplicationServices.h>
-
-#if !defined(M_SQRT2)
-#define M_SQRT2 1.4142135623730950488016887 /* Fix for MSVC. */
-#endif
 
 #define MMMouseToCGEventType(down, button) \
     (down ? MMMouseDownToCGEventType(button) : MMMouseUpToCGEventType(button))

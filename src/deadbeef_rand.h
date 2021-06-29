@@ -1,5 +1,4 @@
-#ifndef DEADBEEF_RAND_H
-#define DEADBEEF_RAND_H
+#pragma once
 
 #include <cstdint>
 
@@ -31,5 +30,3 @@ uint32_t deadbeef_generate_seed(void);
  * Also taken from the rand() man page. */
 #define DEADBEEF_RANDRANGE(a, b) \
 	(uint32_t)DEADBEEF_UNIFORM(a, b)
-
-#endif /* DEADBEEF_RAND_H */

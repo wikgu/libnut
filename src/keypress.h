@@ -45,6 +45,10 @@
 
 #endif
 
+inline MMKeyFlags operator|(MMKeyFlags a, MMKeyFlags b)
+{
+	return static_cast<MMKeyFlags>(static_cast<int>(a) | static_cast<int>(b));
+}
 /* Toggles the given key down or up. */
 void toggleKeyCode(MMKeyCode code, const bool down, MMKeyFlags flags);
 
