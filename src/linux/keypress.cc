@@ -3,6 +3,12 @@
 #include "../microsleep.h"
 
 #include <cctype> /* For isupper() */
+#include <iostream>
+#include <string>
+#include <memory>
+#include <vector>
+#include <sstream>
+#include <iomanip>
 
 #include <X11/extensions/XTest.h>
 #include "../xdisplay.h"
@@ -58,71 +64,86 @@ void tapKey(char c, MMKeyFlags flags)
 	toggleKey(c, false, flags);
 }
 
-#define toggleUniKey(c, down) toggleKey(c, down, MOD_NONE)
+int32_t getScratchKeyCode() {
+	// TODO: Add link to xdotool src
+	Display *dpy = XGetMainDisplay();
+	KeySym *keySyms = nullptr;
+	int32_t scratchKey;
+	int32_t keySymbolsPerKeyCode = 0;
+	int32_t keyCodeLow, keyCodeHigh;
+	XDisplayKeycodes(dpy, &keyCodeLow, &keyCodeHigh);
+	keySyms = XGetKeyboardMapping(dpy, keyCodeLow, keyCodeHigh - keyCodeLow, &keySymbolsPerKeyCode);
+	for (int32_t keyCode = keyCodeLow; keyCode < keyCodeHigh; ++keyCode) {
+		bool keyIsEmpty = true;
+		for (int32_t keySymbolIndex = 0; keySymbolIndex < keySymbolsPerKeyCode; ++ keySymbolIndex) {
+			int32_t index = (keyCode - keyCodeLow) * keySymbolsPerKeyCode + keySymbolIndex;
+			if (keySyms[index] != 0) {
+				keyIsEmpty = false;
+			} else {
+				break;
+			}
+		}
+		if (keyIsEmpty) {
+			scratchKey = keyCode;
+			break;
+		}
+	}
+	XFree(keySyms);
 
-static void tapUniKey(char c)
-{
-	toggleUniKey(c, true);
-	toggleUniKey(c, false);
+	return scratchKey;
 }
 
-void typeString(const char *str)
+bool isSurrogate(const char16_t &value) {
+	return (value >= 0xD800 && value <= 0xDFFF);
+}
+
+char32_t decodeSurrogates(const char16_t &high, const char16_t &low) {
+	// See https://en.wikipedia.org/wiki/UTF-16#U+D800_to_U+DFFF
+	char32_t highResult = (high - 0xD800) * 0x400;
+	char32_t lowResult = low - 0xDC00;
+	return (highResult + lowResult + 0x10000);
+}
+
+std::vector<std::string> convertToUnicodeSymbols(const std::u16string &str)
 {
-	unsigned short c;
-	unsigned short c1;
-	unsigned short c2;
-	unsigned short c3;
-	unsigned long n;
+	std::vector<std::string> symbols(str.length());
+	for (auto it = str.begin(); it != str.end();) {
+		std::stringstream symbol;
+		const char16_t c = *it;
+		if (isSurrogate(c)) {
+			++it;
+			const char16_t lowSurrogate = *it;
+			symbol << "U" << std::setw(4) << std::setfill('0') << std::hex << decodeSurrogates(c, lowSurrogate);
+		} else {
+			symbol << "U" << std::setw(4) << std::setfill('0') << std::hex << c;
+		}
+		symbols.push_back(symbol.str());
+		++it;
+	}
+	return symbols;
+}
 
-	while (*str != '\0')
-	{
-		c = *str++;
+void revertKeyboardMapping(Display *dpy, int32_t keyCode) {
+	KeySym keySyms[1] = {0};
+	XChangeKeyboardMapping(dpy, keyCode, 1, keySyms, 1);
+	XFlush(dpy);
+}
 
-		// warning, the following utf8 decoder
-		// doesn't perform validation
-		if (c <= 0x7F)
-		{
-			// 0xxxxxxx one byte
-			n = c;
-		}
-		else if ((c & 0xE0) == 0xC0)
-		{
-			// 110xxxxx two bytes
-			c1 = (*str++) & 0x3F;
-			n = ((c & 0x1F) << 6) | c1;
-		}
-		else if ((c & 0xF0) == 0xE0)
-		{
-			// 1110xxxx three bytes
-			c1 = (*str++) & 0x3F;
-			c2 = (*str++) & 0x3F;
-			n = ((c & 0x0F) << 12) | (c1 << 6) | c2;
-		}
-		else if ((c & 0xF8) == 0xF0)
-		{
-			// 11110xxx four bytes
-			c1 = (*str++) & 0x3F;
-			c2 = (*str++) & 0x3F;
-			c3 = (*str++) & 0x3F;
-			n = ((c & 0x07) << 18) | (c1 << 12) | (c2 << 6) | c3;
-		}
+void typeString(const std::u16string &str)
+{
+	Display *dpy = XGetMainDisplay();
+	int32_t scratchKeyCode = getScratchKeyCode();
+	std::vector<std::string> symbols = convertToUnicodeSymbols(str);
+	for (auto it = symbols.begin(); it != symbols.end(); ++it) {
+		KeySym sym = XStringToKeysym(it->c_str());
+		KeySym keySyms[2] = {sym, sym};
+		XChangeKeyboardMapping(dpy, scratchKeyCode, 2, keySyms, 1);
+		XFlush(dpy);
+		KeyCode code = scratchKeyCode;
 
-		toggleUniKey(n, true);
-		toggleUniKey(n, false);
+		XTestFakeKeyEvent(dpy, code, True, CurrentTime);
+		XTestFakeKeyEvent(dpy, code, False, CurrentTime);
+		revertKeyboardMapping(dpy, scratchKeyCode);
 	}
 }
 
-void typeStringDelayed(const char *str, const unsigned cpm)
-{
-	/* Characters per second */
-	const double cps = (double)cpm / 60.0;
-
-	/* Average milli-seconds per character */
-	const double mspc = (cps == 0.0) ? 0.0 : 1000.0 / cps;
-
-	while (*str != '\0')
-	{
-		tapUniKey(*str++);
-		microsleep(mspc + (DEADBEEF_UNIFORM(0.0, 62.5)));
-	}
-}
