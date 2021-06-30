@@ -48,7 +48,7 @@ void win32KeyEvent(int key, MMKeyFlags flags)
 	case VK_BROWSER_HOME:
 	case VK_LAUNCH_MAIL:
 	{
-		flags = flags | KEYEVENTF_EXTENDEDKEY;
+		flags = static_cast<MMKeyFlags>(flags | KEYEVENTF_EXTENDEDKEY);
 		break;
 	}
 	}
@@ -73,15 +73,15 @@ void toggleKeyCode(MMKeyCode code, const bool down, MMKeyFlags flags)
 
 	/* Parse modifier keys. */
 	if (flags & MOD_META)
-		WIN32_KEY_EVENT_WAIT(K_META, dwFlags);
+		WIN32_KEY_EVENT_WAIT(K_META, static_cast<MMKeyFlags>(dwFlags));
 	if (flags & MOD_ALT)
-		WIN32_KEY_EVENT_WAIT(K_ALT, dwFlags);
+		WIN32_KEY_EVENT_WAIT(K_ALT, static_cast<MMKeyFlags>(dwFlags));
 	if (flags & MOD_CONTROL)
-		WIN32_KEY_EVENT_WAIT(K_CONTROL, dwFlags);
+		WIN32_KEY_EVENT_WAIT(K_CONTROL, static_cast<MMKeyFlags>(dwFlags));
 	if (flags & MOD_SHIFT)
-		WIN32_KEY_EVENT_WAIT(K_SHIFT, dwFlags);
+		WIN32_KEY_EVENT_WAIT(K_SHIFT, static_cast<MMKeyFlags>(dwFlags));
 
-	win32KeyEvent(code, dwFlags);
+	win32KeyEvent(code, static_cast<MMKeyFlags>(dwFlags));
 }
 
 void tapKeyCode(MMKeyCode code, MMKeyFlags flags)
@@ -99,16 +99,16 @@ void toggleKey(char c, const bool down, MMKeyFlags flags)
 
 	if (isupper(c) && !(flags & MOD_SHIFT))
 	{
-		flags = flags | MOD_SHIFT; /* Not sure if this is safe for all layouts. */
+		flags = static_cast<MMKeyFlags>(flags | MOD_SHIFT); /* Not sure if this is safe for all layouts. */
 	}
 
 	modifiers = keyCode >> 8; // Pull out modifers.
 	if ((modifiers & 1) != 0)
-		flags = flags | MOD_SHIFT; // Uptdate flags from keycode modifiers.
+		flags = static_cast<MMKeyFlags>(flags | MOD_SHIFT); // Update flags from keycode modifiers.
 	if ((modifiers & 2) != 0)
-		flags = flags | MOD_CONTROL;
+		flags = static_cast<MMKeyFlags>(flags | MOD_CONTROL);
 	if ((modifiers & 4) != 0)
-		flags = flags | MOD_ALT;
+		flags = static_cast<MMKeyFlags>(flags | MOD_ALT);
 	keyCode = keyCode & 0xff; // Mask out modifiers.
 	toggleKeyCode(keyCode, down, flags);
 }
