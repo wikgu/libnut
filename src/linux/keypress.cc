@@ -46,9 +46,9 @@ void toggleKey(char c, const bool down, MMKeyFlags flags)
 
 	if (isupper(c) && !(flags & MOD_SHIFT))
 	{
-		toggleKeyCode(keyCode, down, flags | MOD_SHIFT);
+		toggleKeyCode(keyCode, down, static_cast<MMKeyFlags>(flags | MOD_SHIFT));
 	} else {
-		toggleKeyCode(keyCode, down, flags);
+		toggleKeyCode(keyCode, down, static_cast<MMKeyFlags>(flags));
 	}
 }
 
