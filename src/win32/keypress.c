@@ -6,7 +6,7 @@
 
 /* Convenience wrappers around ugly APIs. */
 #define WIN32_KEY_EVENT_WAIT(key, flags) \
-	(win32KeyEvent(key, flags), Sleep(DEADBEEF_RANDRANGE(0, 63)))
+	(win32KeyEvent(key, flags)))
 
 void win32KeyEvent(int key, MMKeyFlags flags)
 {
